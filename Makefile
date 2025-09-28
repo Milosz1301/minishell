@@ -1,0 +1,9 @@
+NAME = minishell
+CC = cc
+CFLAGS = -g -Wall -Wextra -Werror
+LIBFT_FLAGS = -Llibft -lft
+LIBFT = libft.a
+LIBFT_DIR = ./libft_extended
+OBJS_DIR = objs
+SRCS_DIR = srcs
+OBJS = $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
