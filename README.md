@@ -1,2 +1,2 @@
 # minishell
-42 Warsaw project done with Alexandros
+minishell done by Vodka & Ouzo team
