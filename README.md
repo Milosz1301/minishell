@@ -1,2 +1,2 @@
 # minishell
-minishell done by Vodka & Ouzo team
+done by Vodka & Ouzo team
