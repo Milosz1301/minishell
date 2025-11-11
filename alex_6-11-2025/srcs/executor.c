@@ -24,9 +24,30 @@ static int	ft_forking_check(t_pipe *pipeline, t_shell *shell, t_error *err)
 		return (1);
 	if (pipeline->command->red_chain != NULL)
 		return (1);
-	if (ft_check_for_built_in((pipeline->command->argv)[0], err) != B_NONE)
+	if (ft_check_for_built_in((pipeline->command->argv)[0], err) == B_NONE)
 		return (1);
 	return (err->forking_check = 0);
+}
+
+//A function that will run on parent the built-in
+int	ft_run_first_built_in(t_pipe *pipe, int *is_first_pipe, t_shell *shell)
+{
+	int			saved_fdin;
+	int			saved_fdout;
+	t_built_in	b_type;
+
+	if (!pipe)
+		return (shell->err->run_first_built_in = 0);
+	saved_fdin = dup(STDIN_FILENO);
+	saved_fdout = dup(STDOUT_FILENO);
+	*is_first_pipe = 0;
+	b_type = ft_check_for_built_in(pipe->command->argv[0], shell->err);
+	if (pipe->command->red_chain != NULL)
+		ft_redirector(pipe->command->red_chain, shell, shell->err);
+	ft_exec_built_in(b_type, shell, pipe->command->argv, pipe);
+	dup2(STDIN_FILENO, saved_fdin);
+	dup2(STDOUT_FILENO,saved_fdout);
+	return (0);
 }
 
 //A function to run in the child process
@@ -86,6 +107,7 @@ void	ft_refresh_rl(void)
 int	ft_executor(t_pipe  *pipeline, t_shell *shell, t_error *err)
 {
 	pid_t	pid;
+	int		is_first_pipe;
 	int		pipefd[2];
 	int		prev_fd;
 	int		wstatus;
@@ -94,8 +116,11 @@ int	ft_executor(t_pipe  *pipeline, t_shell *shell, t_error *err)
 		return (err->executor = 1);
 	pid = -1;
 	prev_fd = -1;
+	is_first_pipe = 1;
 	while (pipeline)
 	{
+		if (is_first_pipe && ft_check_for_built_in(pipeline->command->argv[0], err))
+			ft_run_first_built_in(pipeline, &is_first_pipe, shell);
 		if (pipeline->next)
 			pipe(pipefd);
 		if (ft_forking_check(pipeline, shell, err) == 1)

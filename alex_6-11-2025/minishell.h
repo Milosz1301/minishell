@@ -181,7 +181,7 @@ typedef struct s_error
 	int	exec_built_in;
 	int	pathseter;
 	int	exec_cmd;
-
+	int	run_first_built_in;
 } t_error;
 
 //This structure holds information about the shell state, like the exit status

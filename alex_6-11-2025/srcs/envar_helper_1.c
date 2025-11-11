@@ -96,15 +96,20 @@ int	ft_del_envar(t_envar **envc, t_envar *var, t_error *err)
 //stated key
 t_envar	*ft_get_envar(t_envar *envc, char *key, t_error *err)
 {
+	t_envar	*res;
+	size_t	key_len;
+
 	if (!envc || !key)
 	{
 		err->get_envar = 1;
 		return (NULL);
 	}
-	while (envc && !ft_strncmp(envc->key, key, ft_strlen(key) + 1))
-		envc = envc->next;
+	key_len = ft_strlen(key) + 1;
+	res = envc;
+	while (res && ft_strncmp(res->key, key, key_len) != 0)
+		res = res->next;
 	err->get_envar = 0;
-	if (!envc)
+	if (!res)
 		return (NULL);
-	return (envc);
+	return (res);
 }

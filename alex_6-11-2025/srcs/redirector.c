@@ -42,12 +42,16 @@ static int	ft_handle_redir(t_redirect *red_chain, t_shell *shell, t_error *err)
 //Main redirection handling function
 int	ft_redirector(t_redirect *red_chain, t_shell *shell, t_error *err)
 {
+	t_redirect	*ref;
+
 	if (!red_chain || !shell)
 		return (err->redirector = 1);
-	while (red_chain)
+	ref = red_chain;
+	while (ref)
 	{
-		ft_handle_redir(red_chain, shell, err);
-		red_chain = red_chain->next;
+		ft_handle_redir(ref, shell, err);
+		ref = ref->next;
 	}
+	ft_del_redir_chain(&red_chain, err);
 	return (err->redirector = 0);
 }

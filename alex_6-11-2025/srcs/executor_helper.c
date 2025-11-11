@@ -79,7 +79,7 @@ int	ft_pathseter(t_envar *envc, t_shell *shell)
 }
 
 //A funciton that looks for the program in every path and returns the path
-//in which it found it, or NULL if it didn't firnd any path to the program
+//in which it found it, or NULL if it didn't find any path to the program
 char	*ft_pathfinder(char *command, t_shell *shell)
 {
 	size_t	index;
@@ -129,8 +129,11 @@ int	ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err)
 	else
 	{
 		path = ft_pathfinder(command, shell);
-		execve(path, argv_ref, shell->envp);
-		free(path);
+		if (path != NULL)
+		{
+			execve(path, argv_ref, shell->envp);
+			free(path);
+		}
 	}
 	exit(0);
 	return (err->exec_cmd = 0);

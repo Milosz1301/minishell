@@ -99,6 +99,7 @@ int ft_echo(char **argv, t_shell *shell, t_error *err)
 	{
 		ft_putstr_fd(argv[i], STDOUT_FILENO);
 		i++;
+		
 	}
 	if (argv[1] && ft_check_for_nflag(argv[1]) == 0)
 		write(STDOUT_FILENO, "\n", 1);
