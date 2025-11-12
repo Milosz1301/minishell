@@ -95,11 +95,14 @@ int ft_echo(char **argv, t_shell *shell, t_error *err)
 		return (shell->last_exit = 1);
 	}
 	i = 1;
+	if (argv[1] && ft_check_for_nflag(argv[1]) == 1)
+		i++;
 	while (argv[i])
 	{
 		ft_putstr_fd(argv[i], STDOUT_FILENO);
 		i++;
-		
+		if (argv[i])
+			ft_putchar_fd(' ', STDOUT_FILENO);
 	}
 	if (argv[1] && ft_check_for_nflag(argv[1]) == 0)
 		write(STDOUT_FILENO, "\n", 1);

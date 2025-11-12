@@ -74,7 +74,6 @@ int	ft_pathseter(t_envar *envc, t_shell *shell)
 	if (!path)
 		return (shell->err->pathseter = 1);
 	shell->path_arr = ft_split(path->value, ':');
-	ft_print_arr(shell->path_arr);
 	return (shell->err->pathseter = 0);
 }
 

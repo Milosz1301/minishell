@@ -30,12 +30,17 @@ int	main(int argc, char	*argv[], char **envp)
 			if (shell->input && *(shell->input))
 				add_history(shell->input);
 			else
+			{
 				ft_refresh_rl();
+				continue;
+			}
 			shell->chain = lexer(shell->input, shell->err);
 			pipeline = ft_parser(&(shell->chain), shell->err);
 			ft_expander(pipeline, shell, shell->err);
 			ft_executor(pipeline, shell, shell->err);
+			ft_del_pipeline(&pipeline, shell->err);
 			free(shell->input);
+			ft_refresh_rl();
 		}
 	}
 	return (0);

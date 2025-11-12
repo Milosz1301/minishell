@@ -55,7 +55,5 @@ int	ft_export(char **argv, t_shell *shell)
 		ft_reassign_value(envar, value);
 	ft_freearr(shell->envp, env_amount);
 	shell->envp = ft_set_envp(shell->envc, shell->err);
-	free(key);
-	free(value);
 	return(shell->last_exit = 0);
 }

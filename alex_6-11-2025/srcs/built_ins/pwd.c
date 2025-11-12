@@ -25,6 +25,7 @@ int	ft_pwd(char **argv, t_shell *shell)
 		pwd_str = getcwd(NULL, 0);
 	else
 		pwd_str = ft_strdup(pwd_var->value);
-	ft_putstr_fd(pwd_str, STDOUT_FILENO);
+	ft_putendl_fd(pwd_str, STDOUT_FILENO);
+	free(pwd_str);
 	return (shell->last_exit = 0);
 }
