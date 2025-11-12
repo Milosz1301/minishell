@@ -86,10 +86,7 @@ char	*ft_pathfinder(char *command, t_shell *shell)
 	char	*temp;
 
 	if (!command || !shell->path_arr || !*(shell->path_arr))
-	{
-		shell->err->pathfinder = 1;
 		return (NULL);
-	}
 	index = 0;
 	path = NULL;
 	temp = NULL;
@@ -99,7 +96,10 @@ char	*ft_pathfinder(char *command, t_shell *shell)
 		path = ft_strjoin(shell->path_arr[index], temp);
 		free(temp);
 		if (access(path, X_OK) == 0)
+		{
+			//ft_freearr(shell->path_arr, ft_count_arr(shell->path_arr));
 			return (path);
+		}
 		free(path);
 		index++;
 	}

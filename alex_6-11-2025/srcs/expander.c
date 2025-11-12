@@ -67,8 +67,6 @@ int	ft_expander(t_pipe *pipeline, t_shell *shell, t_error *err)
 		ft_expand_redir(red_chain, shell, err);
 		ft_set_cmd_argv(pipeline, shell, err);
 		pipeline = pipeline->next;
-		if (ft_error_check_expander(err) == 1)
-			return (err->expander = 1);
 	}
 	return (err->expander = 0);
 }

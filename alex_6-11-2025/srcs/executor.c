@@ -18,7 +18,7 @@
 //if it returns -1 we have error
 static int	ft_forking_check(t_pipe *pipeline, t_shell *shell, t_error *err)
 {
-	if (!pipeline || !shell || !pipeline->command->argv)
+	if (!pipeline || !shell)
 		return (err->forking_check = -1);
 	if (pipeline->next != NULL)
 		return (1);
@@ -60,14 +60,15 @@ static int	ft_run_in_child(t_pipe *pipe, t_shell *shell, int pipefd[],
 	}
 	if (pipe->next != NULL)
 	{
-		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[0]);
+		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 	}
 	if (pipe->command->red_chain != NULL)
 		ft_redirector(pipe->command->red_chain, shell, shell->err);
 	ft_exec_cmd(pipe, shell, shell->err);
-	return (shell->err->run_in_child = 0);
+	exit(0);
+	return (0);
 }
 
 //Helper function to run in the parent process
@@ -106,6 +107,7 @@ int	ft_executor(t_pipe  *pipeline, t_shell *shell, t_error *err)
 	pid_t	pid;
 	int		pipefd[2];
 	int		prev_fd;
+	int		fork_check;
 	int		wstatus;
 
 	if (!pipeline || !shell)
@@ -114,15 +116,19 @@ int	ft_executor(t_pipe  *pipeline, t_shell *shell, t_error *err)
 	prev_fd = -1;
 	if (!pipeline->next && ft_check_for_built_in(pipeline->command->argv[0], err))
 		ft_run_first_built_in(pipeline, shell);
+	fork_check = ft_forking_check(pipeline, shell, err);
 	while (pipeline)
 	{
 		if (pipeline->next)
 			pipe(pipefd);
 		pid = -1;
-		if (ft_forking_check(pipeline, shell, err) == 1)
+		if (fork_check == 1)
 			pid = fork();
 		if (pid == 0)
+		{
 			ft_run_in_child(pipeline, shell, pipefd, prev_fd);
+			return (err->executor = 0);
+		}
 		else
 			ft_run_in_parent(pipeline, pipefd, &prev_fd);
 		pipeline = pipeline->next;
