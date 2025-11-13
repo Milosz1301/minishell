@@ -19,7 +19,7 @@
 //and 1 if you don't (also set the respective error as 1)
 static int	ft_check_file_access(char *filepath, t_error *err)
 {
-	if (access(filepath, R_OK | W_OK))
+	if (!access(filepath, R_OK | W_OK))
 		return (err->check_file_access = 0);
 	return (err->check_file_access = 1);
 }
@@ -30,7 +30,7 @@ int	ft_append(char *filepath, t_error *err)
 	int	fd;
 
 	fd = -1;
-	if (access(filepath, F_OK) && ft_check_file_access(filepath, err) == 1)
+	if (!access(filepath, F_OK) && ft_check_file_access(filepath, err) == 1)
 		return (err->append = 1);
 	fd = open(filepath, O_WRONLY | O_CREAT | O_APPEND, 00644);
 	if (fd == -1)
@@ -46,7 +46,7 @@ int	ft_infile(char *filepath, t_error *err)
 	int	fd;
 
 	fd = -1;
-	if (access(filepath, F_OK) && ft_check_file_access(filepath , err) == 1)
+	if (!access(filepath, F_OK) && ft_check_file_access(filepath , err) == 1)
 		return (err->infile = 1);
 	fd = open(filepath, O_RDONLY);
 	if (fd == -1)
@@ -83,14 +83,14 @@ int	ft_heredoc(char *delimeter, t_quote_type q_type, t_shell *shell)
 	line = NULL;
 	while (1)
 	{
-		line = readline("> ");
+		line = readline(">");
 		if (!line || !ft_strncmp(line, delimeter, ft_strlen(delimeter) + 1))
 		{
 			if (line)
 				free(line);
 			break ;
 		}
-		if (q_type != Q_NONE)
+		if (q_type == Q_NONE)
 			ft_expand_str(&line, shell, shell->err);
 		ft_putstr_fd(line, herefd[1]);
 		write(herefd[1], "\n", 1);

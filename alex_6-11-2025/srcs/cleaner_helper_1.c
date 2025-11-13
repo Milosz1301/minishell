@@ -50,23 +50,24 @@ void	ft_freearr(char **arr, size_t index)
 
 //check if ft_count_arr should count one extra for the NULL termination of the
 //array
-int	ft_del_shell(t_shell *shell)
+int	ft_del_shell(t_shell **shell)
 {
-	if (!shell)
+	if (!*shell)
 		return (0);
-	if (shell->input)
-		free(shell->input);
-	if (shell->envp)
-		ft_freearr(shell->envp, ft_envar_amount(shell->envc, shell->err));
-	if (shell->path_arr)
-		ft_freearr(shell->path_arr, ft_count_arr(shell->path_arr));
-	if (shell->envc)
-		ft_del_envc(&(shell->envc), shell->err);
-	if (shell->chain)
-		ft_del_token_chain(&(shell->chain), shell->err);
-	if (shell->err)
-		free(shell->err);
-	free(shell);
+	if ((*shell)->input)
+		free((*shell)->input);
+	if ((*shell)->envp)
+		ft_freearr((*shell)->envp, ft_envar_amount((*shell)->envc, (*shell)->err));
+	if ((*shell)->path_arr)
+		ft_freearr((*shell)->path_arr, ft_count_arr((*shell)->path_arr));
+	if ((*shell)->envc)
+		ft_del_envc(&((*shell)->envc), (*shell)->err);
+	if ((*shell)->chain)
+		ft_del_token_chain(&((*shell)->chain), (*shell)->err);
+	if ((*shell)->err)
+		free((*shell)->err);
+	free(*shell);
+	*shell = NULL;
 	return (0);
 }
 

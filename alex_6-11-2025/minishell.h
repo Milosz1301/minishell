@@ -194,6 +194,7 @@ typedef struct s_shell
 	t_envar		*envc;
 	t_error		*err;
 	t_token		*chain;
+	t_pipe		*pipeline;
 	int			last_exit;
 	int			env_amount;
 } t_shell;
@@ -295,7 +296,7 @@ int				ft_del_pipeline(t_pipe **pipeline, t_error *err);
 void			ft_del_string(char *string);
 size_t			ft_count_arr(char **arr);
 void			ft_freearr(char **arr, size_t index);
-int				ft_del_shell(t_shell *shell);
+int				ft_del_shell(t_shell **shell);
 int				ft_del_envc(t_envar **envc, t_error *err);
 //-----------------------------------------------------------------------------
 //ERROR CHECKER (2)

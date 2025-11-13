@@ -22,7 +22,7 @@ static int	ft_handle_redir(t_redirect *red_chain, t_shell *shell, t_error *err)
 	int	heredoc_fd;
 
 	heredoc_fd = -1;
-	if (!red_chain || !shell || red_chain->type == Q_NONE)
+	if (!red_chain || !shell || red_chain->type == RE_NONE)
 		return(err->handle_redir = 1);
 	if (red_chain->type == RE_IN)
 		ft_infile(red_chain->target, err);
@@ -52,6 +52,6 @@ int	ft_redirector(t_redirect *red_chain, t_shell *shell, t_error *err)
 		ft_handle_redir(ref, shell, err);
 		ref = ref->next;
 	}
-	ft_del_redir_chain(&red_chain, err);
+	//ft_del_redir_chain(&red_chain, err);
 	return (err->redirector = 0);
 }

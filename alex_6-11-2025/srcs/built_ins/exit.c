@@ -17,7 +17,7 @@ void	ft_exit(t_pipe *pipeline, t_shell *shell)
 	if (pipeline)
 		ft_del_pipeline(&pipeline, shell->err);
 	if (shell)
-		ft_del_shell(shell);
+		ft_del_shell(&shell);
 	rl_clear_history();
 	exit(0);
 }
