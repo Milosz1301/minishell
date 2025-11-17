@@ -88,6 +88,7 @@ typedef struct s_redirect
 	t_redir_type		type;
 	char				*target;
 	t_quote_type		q_type;
+	int					here_fd;
 	struct s_redirect	*next;
 } t_redirect;
 

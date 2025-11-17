@@ -74,6 +74,8 @@ int	ft_outfile(char *filepath, t_error *err)
 
 //Handles the << here-doc redirection
 //We will use a pipe to do the heredoc
+//Heredocs need to be handled separately for every pipe in the pipeline
+//and save the heredoc fd of the pipe in a separate field
 int	ft_heredoc(char *delimeter, t_quote_type q_type, t_shell *shell)
 {
 	int		herefd[2];
