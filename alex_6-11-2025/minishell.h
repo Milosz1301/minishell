@@ -21,6 +21,8 @@
 # include <fcntl.h>
 # include <stdbool.h>
 # include "libft_extended/libft.h"
+# include <sys/stat.h>
+# include <sys/types.h>
 
 //Enum with quotation type
 //We have the Q_NONE type because ft_bzero will set the enum var to 0
@@ -183,6 +185,7 @@ typedef struct s_error
 	int	pathseter;
 	int	exec_cmd;
 	int	run_first_built_in;
+	int	cd;
 } t_error;
 
 //This structure holds information about the shell state, like the exit status
