@@ -29,23 +29,60 @@ static int	ft_forking_check(t_pipe *pipeline, t_shell *shell, t_error *err)
 	return (err->forking_check = 0);
 }
 
+//Function will handle redirections and keep the heredoc file descriptors
+//in the redirections structure
+int	ft_get_heredocs(t_pipe *pipeline, t_shell *shell)
+{
+	t_redirect	*ref;
+	t_redirect	*last_heredoc;
+
+	if (!pipeline || !pipeline->command || !shell)
+		return (-1);
+	if (!pipeline->command->red_chain)
+		return (0);
+	last_heredoc = NULL;
+	ref = NULL;
+	while(pipeline)
+	{
+		ref = pipeline->command->red_chain;
+		while (ref)
+		{
+			ref->here_fd = -1;
+			if (ref->type == RE_HEREDOC)
+			{
+				if (last_heredoc != NULL && last_heredoc->here_fd == -1)
+				{
+					close(last_heredoc->here_fd);
+					last_heredoc->here_fd = -1;
+				}
+				ref->here_fd = ft_heredoc(ref->target, ref->q_type, shell);
+				last_heredoc = ref;
+			}
+			ref = ref->next;
+		}
+		pipeline = pipeline->next;
+	}
+	return (0); 
+}
+
 //A function that will run on parent the built-in
-int	ft_run_first_built_in(t_pipe *pipe, t_shell *shell)
+int	ft_run_first_built_in(t_pipe **pipe, t_shell *shell)
 {
 	int			saved_fdin;
 	int			saved_fdout;
 	t_built_in	b_type;
 
-	if (!pipe)
+	if (!*pipe)
 		return (shell->err->run_first_built_in = 0);
 	saved_fdin = dup(STDIN_FILENO);
 	saved_fdout = dup(STDOUT_FILENO);
-	b_type = ft_check_for_built_in(pipe->command->argv[0], shell->err);
-	if (pipe->command->red_chain != NULL)
-		ft_redirector(pipe->command->red_chain, shell, shell->err);
-	ft_exec_built_in(b_type, shell, pipe->command->argv, pipe);
+	b_type = ft_check_for_built_in((*pipe)->command->argv[0], shell->err);
+	if ((*pipe)->command->red_chain != NULL)
+		ft_redirector((*pipe)->command->red_chain, shell, shell->err);
+	ft_exec_built_in(b_type, shell, (*pipe)->command->argv, *pipe);
 	dup2(saved_fdin, STDIN_FILENO);
 	dup2(saved_fdout,STDOUT_FILENO);
+	*pipe = (*pipe)->next;
 	return (0);
 }
 
@@ -107,22 +144,23 @@ int	ft_executor(t_pipe  *pipeline, t_shell *shell, t_error *err)
 	pid_t	pid;
 	int		pipefd[2];
 	int		prev_fd;
-	int		fork_check;
+	//int		fork_check;
 	int		wstatus;
 
 	if (!pipeline || !shell)
 		return (err->executor = 1);
 	pid = -1;
 	prev_fd = -1;
+	ft_get_heredocs(pipeline, shell);
 	if (!pipeline->next && ft_check_for_built_in(pipeline->command->argv[0], err))
-		ft_run_first_built_in(pipeline, shell);
-	fork_check = ft_forking_check(pipeline, shell, err);
+		ft_run_first_built_in(&pipeline, shell);
+	//fork_check = ft_forking_check(pipeline, shell, err);
 	while (pipeline)
 	{
 		if (pipeline->next)
 			pipe(pipefd);
 		pid = -1;
-		if (fork_check == 1)
+		if (ft_forking_check(pipeline, shell, err) == 1)
 			pid = fork();
 		if (pid == 0)
 		{

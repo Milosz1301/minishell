@@ -124,7 +124,11 @@ int	ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err)
 	command = argv_ref[0];
 	ft_pathseter(shell->envc, shell);
 	if (ft_check_for_built_in(command, err) != B_NONE)
+	{
 		ft_exec_built_in(ft_check_for_built_in(command, err), shell, argv_ref, pipe);
+		ft_del_pipeline(&shell->pipeline, err);
+		ft_del_shell(&shell);
+	}
 	else
 	{
 		path = ft_pathfinder(command, shell);

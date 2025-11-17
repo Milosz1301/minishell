@@ -14,7 +14,6 @@
 
 int	main(int argc, char	*argv[], char **envp)
 {
-	t_pipe	*pipeline;
 	t_shell	*shell;
 
 	if (argc == 1 && argv)
@@ -35,10 +34,10 @@ int	main(int argc, char	*argv[], char **envp)
 				continue;
 			}
 			shell->chain = lexer(shell->input, shell->err);
-			pipeline = ft_parser(&(shell->chain), shell->err);
-			ft_expander(pipeline, shell, shell->err);
-			ft_executor(pipeline, shell, shell->err);
-			ft_del_pipeline(&pipeline, shell->err);
+			shell->pipeline = ft_parser(&(shell->chain), shell->err);
+			ft_expander(shell->pipeline, shell, shell->err);
+			ft_executor(shell->pipeline, shell, shell->err);
+			ft_del_pipeline(&shell->pipeline, shell->err);
 			free(shell->input);
 			ft_refresh_rl();
 		}
