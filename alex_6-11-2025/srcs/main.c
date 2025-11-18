@@ -15,7 +15,12 @@
 int	main(int argc, char	*argv[], char **envp)
 {
 	t_shell	*shell;
+	t_pipe	*pipeline;
 
+	ft_signals(SIGINT);
+	ft_signals(SIGQUIT);
+	shell = NULL;
+	pipeline = NULL;
 	if (argc == 1 && argv)
 	{
 		shell = ft_calloc(1, sizeof(t_shell));
@@ -29,10 +34,7 @@ int	main(int argc, char	*argv[], char **envp)
 			if (shell->input && *(shell->input))
 				add_history(shell->input);
 			else
-			{
-				ft_refresh_rl();
-				continue;
-			}
+				ft_exit(pipeline, shell);
 			shell->chain = lexer(shell->input, shell->err);
 			shell->pipeline = ft_parser(&(shell->chain), shell->err);
 			ft_expander(shell->pipeline, shell, shell->err);

@@ -23,6 +23,7 @@
 # include "libft_extended/libft.h"
 # include <sys/stat.h>
 # include <sys/types.h>
+# include <signal.h>
 
 //Enum with quotation type
 //We have the Q_NONE type because ft_bzero will set the enum var to 0

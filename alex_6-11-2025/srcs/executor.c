@@ -90,6 +90,12 @@ int	ft_run_first_built_in(t_pipe **pipe, t_shell *shell)
 static int	ft_run_in_child(t_pipe *pipe, t_shell *shell, int pipefd[],
 				int prev_fd)
 {
+	struct sigaction	sa_child;
+	sa_child.sa_handler = SIG_DFL;
+	sa_child.sa_flags = 0;
+	sigemptyset(&sa_child.sa_mask);
+	if (sigaction(SIGQUIT, &sa_child, NULL) == -1)
+		ft_exit(pipe, shell);
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);

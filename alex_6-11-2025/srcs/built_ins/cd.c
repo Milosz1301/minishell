@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include "../../minishell.h"
 
 void	ft_cd_op(char *operand, char **pwd_value, char **old_pwd_value)
 {
@@ -32,7 +30,7 @@ void	ft_cd_op(char *operand, char **pwd_value, char **old_pwd_value)
 	}
 }
 
-void	ft_cd(char **argv)
+void	ft_cd(char **argv, t_shell *shell)
 {
 	char	*pwd_value;
 	char	*old_pwd_value;
@@ -58,9 +56,3 @@ void	ft_cd(char **argv)
 	err->cd = 0;
 	return (shell->last_exit = 0);
 }
-
-int	main(int argc, char *argv[])
-{
-	ft_cd(argv);	
-}
-
