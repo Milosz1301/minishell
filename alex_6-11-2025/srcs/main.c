@@ -12,11 +12,14 @@
 
 #include "../minishell.h"
 
+int	g_received_signal = 0;
+
 int	main(int argc, char	*argv[], char **envp)
 {
 	t_shell	*shell;
 	t_pipe	*pipeline;
 
+	g_received_signal = 0;
 	ft_signals(SIGINT);
 	ft_signals(SIGQUIT);
 	shell = NULL;

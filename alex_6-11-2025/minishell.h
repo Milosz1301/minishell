@@ -25,6 +25,8 @@
 # include <sys/types.h>
 # include <signal.h>
 
+extern int	g_received_signal;
+
 //Enum with quotation type
 //We have the Q_NONE type because ft_bzero will set the enum var to 0
 //which is the first member of the enum group 
@@ -354,12 +356,14 @@ int				ft_ww_redir(char **s);
 void			ft_inquote(char c, int *s_quote, int *d_quote);
 void			ft_wa_handle_word(int in_arr[], size_t *words, char *s);
 size_t			ft_word_amount(char *s, char c, t_error *err);
+void		    ft_signals(int signal);
 //-----------------------------------------------------------------------------
 //BUILT-INS
 //>>
 //-----------------------------------------------------------------------------
 //	 CD (0)
 //-----------------------------------------------------------------------------
+int				ft_cd(char **argv, t_shell *shell);
 //-----------------------------------------------------------------------------
 //	 ECHO (3)
 //-----------------------------------------------------------------------------

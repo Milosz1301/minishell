@@ -15,7 +15,7 @@ srcs/lexer_helper_2.c srcs/lexer.c srcs/lexer_helper_1.c srcs/lexer_helper_3.c \
 srcs/redirector_helper.c srcs/redirector.c srcs/built_ins/echo.c \
 srcs/built_ins/env.c srcs/built_ins/exit.c srcs/built_ins/export.c \
 srcs/built_ins/pwd.c srcs/built_ins/unset.c \
-srcs/executor.c srcs/executor_helper.c
+srcs/executor.c srcs/executor_helper.c srcs/built_ins/cd.c srcs/signal.c 
 OBJS = $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
 
 all: $(NAME)

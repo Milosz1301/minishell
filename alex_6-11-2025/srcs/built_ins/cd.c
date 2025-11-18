@@ -12,28 +12,33 @@
 
 #include "../../minishell.h"
 
-void	ft_cd_op(char *operand, char **pwd_value, char **old_pwd_value)
+void	ft_cd_op(char *operand, t_envar *pwd, t_envar *old_pwd)
 {
 	struct stat	st;
+	char	*temp;
 
+	temp = NULL;
 	if (!stat(operand, &st))
 	{
 		if (S_ISDIR(st.st_mode))
 		{
 			if (!access(operand, X_OK))
 			{
-				*old_pwd_value = getcwd(NULL, 0);
+				temp = pwd->value;
+				free(old_pwd->value);
+				old_pwd->value = ft_strdup(temp);
 				chdir(operand);
-				*pwd_value = getcwd(NULL, 0);
+				free(pwd->value);
+				pwd->value = getcwd(NULL, 0);
 			}
 		}
 	}
 }
 
-void	ft_cd(char **argv, t_shell *shell)
+int	ft_cd(char **argv, t_shell *shell)
 {
-	char	*pwd_value;
-	char	*old_pwd_value;
+	//char	*pwd_value;
+	//char	*old_pwd_value;
 	t_envar	*pwd;
 	t_envar	*old_pwd;
 
@@ -43,16 +48,16 @@ void	ft_cd(char **argv, t_shell *shell)
 		return (shell->last_exit = 1);
 	}
 	pwd = ft_get_envar(shell->envc, "PWD", shell->err);
-	old_pwd_value = ft_get_envar(shell->envc, "OLDPWD", shell->err);
-	if (!pwd)
+	old_pwd = ft_get_envar(shell->envc, "OLDPWD", shell->err);
+	/*if (!pwd)
 		pwd_value = NULL;
 	else
-		pwd_value = &(pwd->key);
+		pwd_value = pwd->key;
 	if (!old_pwd)
 		old_pwd_value = NULL;
 	else
-		old_pwd_value = &(old_pwd->key);
-	ft_cd_op(*++argv, &pwd_value, &old_pwd_value);
-	err->cd = 0;
+		old_pwd_value = old_pwd->key;*/
+	ft_cd_op(argv[1], pwd, old_pwd);
+	shell->err->cd = 0;
 	return (shell->last_exit = 0);
 }
