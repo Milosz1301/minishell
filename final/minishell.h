@@ -6,7 +6,7 @@
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:31 by akonstan          #+#    #+#             */
-/*   Updated: 2025/11/20 20:45:39 by mstawski         ###   ########.fr       */
+/*   Updated: 2025/11/20 21:35:20 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef enum s_quote_type
 	Q_BOTH,
 	Q_DOUBLE,
 	Q_SINGLE
-} t_quote_type;
+}	t_quote_type;
 
 //Enum with all the redirection types
 typedef enum s_redir_type
@@ -46,7 +46,7 @@ typedef enum s_redir_type
 	RE_OUT,
 	RE_APPEND,
 	RE_HEREDOC
-} t_redir_type;
+}	t_redir_type;
 
 //Enum with all the token types. Quotes should not be their own tokens
 //We filter them in the lexer out and we set squotesd or dquoted flags
@@ -59,7 +59,7 @@ typedef enum s_token_type
 	T_REDIR,
 	T_PIPE_OP,
 	T_END
-} t_token_type;
+}	t_token_type;
 
 //Enum with all the built in types. We will check the argv passed to execution
 //and see if we have a matching built-in
@@ -73,7 +73,7 @@ typedef enum s_built_in
 	B_EXPORT,
 	B_PWD,
 	B_UNSET
-} t_built_in;
+}	t_built_in;
 
 //Token structure which the lexer will give as output
 //We will work on a single linked list of tokens called CHAIN
@@ -83,7 +83,7 @@ typedef struct s_token
 	t_token_type	type;
 	t_quote_type	q_type;
 	struct s_token	*next;
-} t_token;
+}	t_token;
 
 //Redirections structure, shows what kind of redirection we have and
 //where it should target
@@ -95,7 +95,7 @@ typedef struct s_redirect
 	t_quote_type		q_type;
 	int					here_fd;
 	struct s_redirect	*next;
-} t_redirect;
+}	t_redirect;
 
 //Command struct that holds the actuall command to execute and any 
 //redirections (if they exist)
@@ -106,7 +106,7 @@ typedef struct s_cmd
 	char			**argv;
 	t_token			*cmd_chain;
 	t_redirect		*red_chain;
-} t_cmd;
+}	t_cmd;
 
 //Pipe structure that holds the command on the current pipe and
 //a pointer pointing to the next pipe
@@ -115,7 +115,7 @@ typedef struct s_pipe
 	t_cmd			*command;
 	unsigned int	cmd_amount;
 	struct s_pipe	*next;
-} t_pipe;
+}	t_pipe;
 
 //Envar structure will be holding lal the necessary information about 
 //environmental variables
@@ -125,7 +125,7 @@ typedef struct s_envar
 	char			*value;
 	int				is_exported;
 	struct s_envar	*next;
-} t_envar;
+}	t_envar;
 
 //This is an error holding struct. We will pass t_error variables as
 //arguments so that functions will assign the value to the specific 
@@ -138,7 +138,7 @@ typedef struct s_error
 	int	del_redir_chain;
 	int	del_cmd;
 	int	del_pipeline;
-	int get_last_pipe;
+	int	get_last_pipe;
 	int	new_pipe;
 	int	add_pipe;
 	int	purify_cmd_chain;
@@ -189,7 +189,7 @@ typedef struct s_error
 	int	exec_cmd;
 	int	run_first_built_in;
 	int	cd;
-} t_error;
+}	t_error;
 
 //This structure holds information about the shell state, like the exit status
 //of the last executed command
@@ -204,7 +204,7 @@ typedef struct s_shell
 	t_pipe		*pipeline;
 	int			last_exit;
 	int			env_amount;
-} t_shell;
+}	t_shell;
 
 //-----------------------------------------------------------------------------
 //PARSER (1)
@@ -228,8 +228,9 @@ int				ft_check_token_chain(t_token *chain, t_error *err);
 //EXECUTOR (1)
 //-----------------------------------------------------------------------------
 void			ft_refresh_rl(void);
-int				ft_executor(t_pipe  *pipeline, t_shell *shell, t_error *err);
-int     ft_forking_check(t_pipe *pipeline, t_shell *shell, t_error *err);
+int				ft_executor(t_pipe *pipeline, t_shell *shell, t_error *err);
+int				ft_forking_check(t_pipe *pipeline, t_shell *shell,
+					t_error *err);
 //-----------------------------------------------------------------------------
 //EXECUTOR HELPER_1 (5)
 //-----------------------------------------------------------------------------
@@ -238,13 +239,14 @@ int				ft_exec_built_in(t_built_in built_in, t_shell *shell,
 					char **argv, t_pipe *pipeline);
 int				ft_pathseter(t_envar *envc, t_shell *shell);
 char			*ft_pathfinder(char *command, t_shell *shell);
-int				ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err, int pipefd);
+int				ft_exec_cmd(t_pipe *pipe, t_shell *shell,
+					t_error *err, int pipefd);
 //-----------------------------------------------------------------------------
 //EXECUTOR HELPER_2 (2)
 //-----------------------------------------------------------------------------
-int	ft_run_in_parent(t_pipe *pipe, int pipefd[], int *prev_fd);
-int      ft_run_in_child(t_pipe *pipe, t_shell *shell, int pipefd[],
-                                int prev_fd);
+int				ft_run_in_parent(t_pipe *pipe, int pipefd[], int *prev_fd);
+int				ft_run_in_child(t_pipe *pipe, t_shell *shell, int pipefd[],
+					int prev_fd);
 //-----------------------------------------------------------------------------
 //EXPANDER (4)
 //-----------------------------------------------------------------------------
@@ -260,7 +262,7 @@ int				ft_expand_dollar(char **str, char *dollar,
 //EXPANDER HELPER 2 (5)
 //-----------------------------------------------------------------------------
 char			*ft_rmchar(char **s, char *c);
-int         	ft_rmquotes(char **s, t_error *err);
+int				ft_rmquotes(char **s, t_error *err);
 //-----------------------------------------------------------------------------
 //EXPANDER HELPER 3 (3)
 //-----------------------------------------------------------------------------
@@ -271,7 +273,8 @@ int				ft_handle_qumark(char **target, char **result,
 //-----------------------------------------------------------------------------
 //REDIR STRUCT HELPER (4)
 //-----------------------------------------------------------------------------
-t_redirect		*ft_new_redir(t_redir_type type, char *target, t_quote_type q_type);
+t_redirect		*ft_new_redir(t_redir_type type,
+					char *target, t_quote_type q_type);
 t_redirect		*ft_get_last_redir(t_redirect *red_chain);
 void			ft_add_redir(t_redirect **red_chain, t_redirect *redirect);
 size_t			ft_redirlen(t_redirect *red_chain);
@@ -309,7 +312,7 @@ int				ft_del_pipeline(t_pipe **pipeline, t_error *err);
 //-----------------------------------------------------------------------------
 void			ft_del_string(char *string);
 size_t			ft_count_arr(char **arr);
-int			ft_freearr(char **arr, size_t index);
+int				ft_freearr(char **arr, size_t index);
 int				ft_del_shell(t_shell **shell);
 int				ft_del_envc(t_envar **envc, t_error *err);
 //-----------------------------------------------------------------------------
@@ -363,13 +366,13 @@ int				ft_ww_redir(char **s);
 void			ft_inquote(char c, int *s_quote, int *d_quote);
 void			ft_wa_handle_word(int in_arr[], size_t *words, char *s);
 size_t			ft_word_amount(char *s, char c, t_error *err);
-void		    ft_signals(int signal);
+void			ft_signals(int signal);
 //-----------------------------------------------------------------------------
 //LEXER HELPER 4 (3)
 //-----------------------------------------------------------------------------
-int     ft_wa_pipe(char **s, size_t *words);
-void    ft_wa_handle_word(int in_arr[], size_t *words, char *s);
-void    ft_wa_init(size_t *words, int in_arr[3]);
+int				ft_wa_pipe(char **s, size_t *words);
+void			ft_wa_handle_word(int in_arr[], size_t *words, char *s);
+void			ft_wa_init(size_t *words, int in_arr[3]);
 //-----------------------------------------------------------------------------
 //BUILT-INS
 //>>
@@ -380,11 +383,11 @@ int				ft_cd(char **argv, t_shell *shell);
 //-----------------------------------------------------------------------------
 //	 ECHO (3)
 //-----------------------------------------------------------------------------
-int 			ft_echo(char **argv, t_shell *shell, t_error *err);
+int				ft_echo(char **argv, t_shell *shell, t_error *err);
 //-----------------------------------------------------------------------------
 //	 ENV (1)
 //-----------------------------------------------------------------------------
-void		    ft_print_arr(char **arr);
+void			ft_print_arr(char **arr);
 int				ft_env(char **argv, t_shell *shell);
 //-----------------------------------------------------------------------------
 //	 EXIT (1)
