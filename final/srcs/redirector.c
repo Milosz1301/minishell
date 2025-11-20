@@ -28,7 +28,10 @@ static int	ft_handle_redir(t_redirect *red_chain, t_shell *shell, t_error *err)
 	else if (red_chain->type == RE_APPEND)
 		ft_append(red_chain->target, err);
 	else if (red_chain->type == RE_HEREDOC)
+	{
 		dup2(red_chain->here_fd, STDIN_FILENO);
+		close(red_chain->here_fd);
+	}
 	return (err->handle_redir = 0);
 }
 

@@ -112,7 +112,7 @@ char	*ft_pathfinder(char *command, t_shell *shell)
 //This function will either execute the built in or call execve looking for
 //external program passed in argv
 //execve will send a SIGTRAP SIGNAL??
-int	ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err)
+int	ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err, int pipefd)
 {
 	char	**argv_ref;
 	char	*command;
@@ -128,16 +128,17 @@ int	ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err)
 	if (ft_check_for_built_in(command, err) != B_NONE)
 	{
 		ft_exec_built_in(ft_check_for_built_in(command, err), shell, argv_ref, pipe);
+		close(pipefd);
 		ft_del_pipeline(&shell->pipeline, err);
 		ft_del_shell(&shell);
 	}
 	else
 	{
-		ft_printf("CHILD12313\n");
+		if (pipe->next)
+			close(pipefd);
 		path = ft_pathfinder(command, shell);
 		if (path != NULL)
 		{
-			ft_printf("CHILD12313\n");
 			execve(path, argv_ref, shell->envp);
 			free(path);
 		}

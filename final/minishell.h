@@ -237,7 +237,7 @@ int				ft_exec_built_in(t_built_in built_in, t_shell *shell,
 					char **argv, t_pipe *pipeline);
 int				ft_pathseter(t_envar *envc, t_shell *shell);
 char			*ft_pathfinder(char *command, t_shell *shell);
-int				ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err);
+int				ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err, int pipefd);
 //-----------------------------------------------------------------------------
 //EXPANDER (4)
 //-----------------------------------------------------------------------------

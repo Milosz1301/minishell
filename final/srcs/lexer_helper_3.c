@@ -19,12 +19,12 @@ int	ft_ww_redir(char **s)
 		return (-1);
 	if (**s == '>')
 	{
-		while (**s == '>')
+		while (**s && **s == '>')
 			(*s)++;
 	}
 	else if (**s == '<')
 	{
-		while (**s == '<')
+		while (**s && **s == '<')
 			(*s)++;
 	}
 	return (0);
@@ -60,6 +60,32 @@ void	ft_wa_handle_word(int in_arr[], size_t *words, char *s)
 		ft_inquote(*s, &in_arr[1], &in_arr[2]);
 }
 
+int	ft_wa_pipe(char **s, size_t	 *words)
+{
+	if (!s || !*s)
+		return (1);
+	if (!**s || !*(*s - 1) || !*(*s + 1))
+		return (1);
+	if (*(*s - 1) != ' ' || *(*s + 1) != ' ')
+	{
+		if (*(*s - 1) != ' ')
+			(*words)++;
+		if (*(*s + 1) != ' ')
+			(*words)++;
+	}
+	else
+		(*words)++;
+	return (0);
+}
+
+void	ft_wa_init(size_t *words, int in_arr[3])
+{
+	*words = 0;
+	in_arr[0] = 0;
+	in_arr[1] = 0;
+	in_arr[2] = 0;
+}
+
 //Word amount had a bug with redirections not being accounted for 
 //both possible forms (form1 : >>append form2: >> append)
 //in_arr[0] = in_word, in_arr[1] = in_squote, in_arr[2] = in_dquote
@@ -68,10 +94,7 @@ size_t	ft_word_amount(char *s, char c, t_error *err)
 	size_t	words;
 	int		in_arr[3];
 
-	words = 0;
-	in_arr[0] = 0;
-	in_arr[1] = 0;
-	in_arr[2] = 0;
+	ft_wa_init(&words, in_arr);
 	while (*s)
 	{
 		if (*s == '"' || *s == '\'')
@@ -82,7 +105,10 @@ size_t	ft_word_amount(char *s, char c, t_error *err)
 		{
 			ft_ww_redir(&s);
 			words++;
+			continue ;
 		}
+		else if (*s == '|')
+			ft_wa_pipe(&s, &words);
 		else if (*s != c && in_arr[0] == 0)
 			ft_wa_handle_word(in_arr, &words, s);
 		s++;

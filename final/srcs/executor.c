@@ -80,25 +80,19 @@ int	ft_run_first_built_in(t_pipe **pipe, t_shell *shell)
 static int	ft_run_in_child(t_pipe *pipe, t_shell *shell, int pipefd[],
 				int prev_fd)
 {
-	ft_printf("CHILD\n");
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
 		close(prev_fd);
 	}
-	ft_printf("CHILD1\n");
 	if (pipe->command->red_chain != NULL)
 		ft_redirector(pipe->command->red_chain, shell, shell->err);
-	ft_printf("CHILD2\n");
 	if (pipe->next != NULL)
 	{
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 	}
-	ft_printf("CHILD3\n");
-	ft_exec_cmd(pipe, shell, shell->err);
-	if (pipe->next != NULL)
-		close(pipefd[0]);
+	ft_exec_cmd(pipe, shell, shell->err, pipefd[0]);
 	exit(0);
 	return (0);
 }

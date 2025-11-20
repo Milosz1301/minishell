@@ -98,5 +98,6 @@ int	ft_heredoc(char *delimeter, t_quote_type q_type, t_shell *shell)
 		write(herefd[1], "\n", 1);
 		free(line);
 	}
+	close(herefd[1]);
 	return (herefd[0]);
 }

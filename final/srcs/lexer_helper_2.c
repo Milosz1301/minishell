@@ -56,7 +56,7 @@ static char	*ft_write_word(char **s, char c)
 			ft_ww_redir(s);
 			break ;
 		}
-		else if (**s == c)
+		else if (**s == c || **s == '|')
 			break ;
 		(*s)++;
 	}
@@ -81,7 +81,13 @@ int	ft_split_logic(char **str_arr, char *s, char c)
 			s++;
 		if (*s)
 		{
-			str_arr[index] = ft_write_word(&s, c);
+			if (*s == '|')
+			{
+				str_arr[index] = ft_strdup("|");
+				s++;
+			}
+			else
+				str_arr[index] = ft_write_word(&s, c);
 			if (!str_arr[index])
 			{
 				ft_freearr(str_arr, index);
