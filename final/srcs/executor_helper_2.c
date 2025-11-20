@@ -5,41 +5,47 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mstawski <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/20 19:04:49 by mstawski          #+#    #+#             */
-/*   Updated: 2025/11/20 20:44:02 by mstawski         ###   ########.fr       */
+/*   Created: 2025/11/20 21:48:18 by mstawski          #+#    #+#             */
+/*   Updated: 2025/11/20 21:48:21 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../minishell.h"
 
-int	ft_run_in_child(t_pipe *pipe, t_shell *shell, int pipefd[],
-				int prev_fd)
+#include "../minishell.h"
+//Function will handle redirections and keep the heredoc file descriptors
+//in the redirections structure
+int	ft_get_heredocs(t_pipe *pipeline, t_shell *shell)
 {
-	if (prev_fd != -1)
+	t_redirect	*ref;
+
+	if (!pipeline || !pipeline->command || !shell)
+		return (-1);
+	ref = NULL;
+	while (pipeline)
 	{
-		dup2(prev_fd, STDIN_FILENO);
-		close(prev_fd);
+		ref = pipeline->command->red_chain;
+		while (ref)
+		{
+			ref->here_fd = -1;
+			if (ref->type == RE_HEREDOC)
+				ref->here_fd = ft_heredoc(ref->target, ref->q_type, shell);
+			ref = ref->next;
+		}
+		pipeline = pipeline->next;
 	}
-	if (pipe->command->red_chain != NULL)
-		ft_redirector(pipe->command->red_chain, shell, shell->err);
-	if (pipe->next != NULL)
-	{
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-	}
-	ft_exec_cmd(pipe, shell, shell->err, pipefd[0]);
-	exit(0);
 	return (0);
 }
 
-//Helper function to run in the parent process
-int	ft_run_in_parent(t_pipe *pipe, int pipefd[], int *prev_fd)
+//A function to run in the child process
+//Helper function to refresh the prompt after the execution of a command
+void	ft_refresh_rl(void)
 {
-	if (*prev_fd != -1)
-		close (*prev_fd);
-	if (pipe->next != NULL)
-	{
-		*prev_fd = pipefd[0];
-		close(pipefd[1]);
-	}
-	return (0);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+}
+
+void	ft_exec_init(pid_t *pid, int *prevfd, t_shell *shell, t_pipe *pipeline)
+{
+	*pid = -1;
+	*prevfd = -1;
+	ft_get_heredocs(pipeline, shell);
 }

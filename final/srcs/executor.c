@@ -6,7 +6,7 @@
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:23:09 by akonstan          #+#    #+#             */
-/*   Updated: 2025/11/20 21:19:10 by akonstan         ###   ########.fr       */
+/*   Updated: 2025/11/20 21:50:43 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,33 +24,9 @@ int	ft_forking_check(t_pipe *pipeline, t_shell *shell, t_error *err)
 		return (1);
 	if (pipeline->command->red_chain != NULL)
 		return (1);
-	if (ft_check_for_built_in((pipeline->command->argv)[0], err) == B_NONE)
+	if (ft_built_in_check((pipeline->command->argv)[0], err) == B_NONE)
 		return (1);
 	return (err->forking_check = 0);
-}
-
-//Function will handle redirections and keep the heredoc file descriptors
-//in the redirections structure
-int	ft_get_heredocs(t_pipe *pipeline, t_shell *shell)
-{
-	t_redirect	*ref;
-
-	if (!pipeline || !pipeline->command || !shell)
-		return (-1);
-	ref = NULL;
-	while (pipeline)
-	{
-		ref = pipeline->command->red_chain;
-		while (ref)
-		{
-			ref->here_fd = -1;
-			if (ref->type == RE_HEREDOC)
-				ref->here_fd = ft_heredoc(ref->target, ref->q_type, shell);
-			ref = ref->next;
-		}
-		pipeline = pipeline->next;
-	}
-	return (0);
 }
 
 //A function that will run on parent the built-in
@@ -64,7 +40,7 @@ int	ft_run_first_built_in(t_pipe **pipe, t_shell *shell)
 		return (shell->err->run_first_built_in = 0);
 	saved_fdin = dup(STDIN_FILENO);
 	saved_fdout = dup(STDOUT_FILENO);
-	b_type = ft_check_for_built_in((*pipe)->command->argv[0], shell->err);
+	b_type = ft_built_in_check((*pipe)->command->argv[0], shell->err);
 	if ((*pipe)->command->red_chain != NULL)
 		ft_redirector((*pipe)->command->red_chain, shell, shell->err);
 	ft_exec_built_in(b_type, shell, (*pipe)->command->argv, *pipe);
@@ -74,21 +50,6 @@ int	ft_run_first_built_in(t_pipe **pipe, t_shell *shell)
 	close(saved_fdout);
 	*pipe = (*pipe)->next;
 	return (0);
-}
-
-//A function to run in the child process
-//Helper function to refresh the prompt after the execution of a command
-void	ft_refresh_rl(void)
-{
-	rl_on_new_line();
-	rl_replace_line("", 0);
-}
-
-void	ft_exec_init(pid_t *pid, int *prevfd, t_shell *shell, t_pipe *pipeline)
-{
-	*pid = -1;
-	*prevfd = -1;
-	ft_get_heredocs(pipeline, shell);
 }
 
 //The whole process of the executor will be like this:
@@ -110,7 +71,7 @@ int	ft_executor(t_pipe *pipeline, t_shell *shell, t_error *err)
 	int		fork_check;
 
 	ft_exec_init(&pid, &prev_fd, shell, pipeline);
-	if (!pipeline->next && ft_check_for_built_in(pipeline->command->argv[0], err))
+	if (!pipeline->next && ft_built_in_check(pipeline->command->argv[0], err))
 		ft_run_first_built_in(&pipeline, shell);
 	fork_check = ft_forking_check(pipeline, shell, err);
 	while (pipeline)
@@ -129,4 +90,37 @@ int	ft_executor(t_pipe *pipeline, t_shell *shell, t_error *err)
 	while (waitpid(-1, NULL, 0) > 0)
 		;
 	return (err->executor = 0);
+}
+
+int	ft_run_in_child(t_pipe *pipe, t_shell *shell, int pipefd[],
+				int prev_fd)
+{
+	if (prev_fd != -1)
+	{
+		dup2(prev_fd, STDIN_FILENO);
+		close(prev_fd);
+	}
+	if (pipe->command->red_chain != NULL)
+		ft_redirector(pipe->command->red_chain, shell, shell->err);
+	if (pipe->next != NULL)
+	{
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+	}
+	ft_exec_cmd(pipe, shell, shell->err, pipefd[0]);
+	exit(0);
+	return (0);
+}
+
+//Helper function to run in the parent process
+int	ft_run_in_parent(t_pipe *pipe, int pipefd[], int *prev_fd)
+{
+	if (*prev_fd != -1)
+		close (*prev_fd);
+	if (pipe->next != NULL)
+	{
+		*prev_fd = pipefd[0];
+		close(pipefd[1]);
+	}
+	return (0);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_helper.c                                  :+:      :+:    :+:   */
+/*   executor_helper_1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:31 by akonstan          #+#    #+#             */
-/*   Updated: 2025/11/20 18:19:33 by mstawski         ###   ########.fr       */
+/*   Updated: 2025/11/20 22:02:21 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 //There should be checked only the first argument (Yes exactly, if first string
 //in argv is not a valid built-in or external command, we will give invalid 
 //command error)
-t_built_in	ft_check_for_built_in(char *string, t_error *err)
+t_built_in	ft_built_in_check(char *string, t_error *err)
 {
 	if (!string)
-		return (err->check_for_built_in = -1);
+		return (err->built_in_check = -1);
 	if (!ft_strncmp(string, "cd", ft_strlen("cd") + 1))
 		return (B_CD);
 	else if (!ft_strncmp(string, "echo", ft_strlen("echo") + 1))
@@ -36,7 +36,7 @@ t_built_in	ft_check_for_built_in(char *string, t_error *err)
 		return (B_PWD);
 	else if (!ft_strncmp(string, "unset", ft_strlen("unset") + 1))
 		return (B_UNSET);
-	err->check_for_built_in = 0;
+	err->built_in_check = 0;
 	return (B_NONE);
 }
 
@@ -113,17 +113,17 @@ char	*ft_pathfinder(char *command, t_shell *shell)
 int	ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err, int pipefd)
 {
 	char	**argv_r;
-	char	*command;
+	char	*cmd;
 	char	*path;
 
 	if (!pipe || !pipe->command || !shell || !pipe->command->argv)
 		return (err->exec_cmd = 1);
 	argv_r = pipe->command->argv;
-	cmd = argv_ref[0];
+	cmd = argv_r[0];
 	ft_pathseter(shell->envc, shell);
-	if (ft_check_for_built_in(cmd, err) != B_NONE)
+	if (ft_built_in_check(cmd, err) != B_NONE)
 	{
-		ft_exec_built_in(ft_check_for_built_in(cmd, err), shell, argv_r, pipe);
+		ft_exec_built_in(ft_built_in_check(cmd, err), shell, argv_r, pipe);
 		close(pipefd);
 	}
 	else

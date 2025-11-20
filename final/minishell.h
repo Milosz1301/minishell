@@ -6,7 +6,7 @@
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:31 by akonstan          #+#    #+#             */
-/*   Updated: 2025/11/20 21:35:20 by mstawski         ###   ########.fr       */
+/*   Updated: 2025/11/20 22:03:54 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ typedef struct s_error
 	int	word_amount;
 	int	echo;
 	int	lexer;
-	int	check_for_built_in;
+	int	built_in_check;
 	int	extract_key;
 	int	extract_value;
 	int	set_envc;
@@ -234,7 +234,7 @@ int				ft_forking_check(t_pipe *pipeline, t_shell *shell,
 //-----------------------------------------------------------------------------
 //EXECUTOR HELPER_1 (5)
 //-----------------------------------------------------------------------------
-t_built_in		ft_check_for_built_in(char *string, t_error *err);
+t_built_in		ft_built_in_check(char *string, t_error *err);
 int				ft_exec_built_in(t_built_in built_in, t_shell *shell,
 					char **argv, t_pipe *pipeline);
 int				ft_pathseter(t_envar *envc, t_shell *shell);
@@ -247,6 +247,8 @@ int				ft_exec_cmd(t_pipe *pipe, t_shell *shell,
 int				ft_run_in_parent(t_pipe *pipe, int pipefd[], int *prev_fd);
 int				ft_run_in_child(t_pipe *pipe, t_shell *shell, int pipefd[],
 					int prev_fd);
+void			ft_exec_init(pid_t *pid, int *prevfd, t_shell *shell,
+					t_pipe *pipeline);
 //-----------------------------------------------------------------------------
 //EXPANDER (4)
 //-----------------------------------------------------------------------------
