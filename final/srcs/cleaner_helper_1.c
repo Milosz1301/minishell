@@ -6,7 +6,7 @@
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:54 by akonstan          #+#    #+#             */
-/*   Updated: 2025/11/20 18:20:08 by mstawski         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:25:16 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ size_t	ft_count_arr(char **arr)
 	return (res);
 }
 
-void	ft_freearr(char **arr, size_t index)
+int	ft_freearr(char **arr, size_t index)
 {
 	size_t	counter;
 
@@ -46,6 +46,7 @@ void	ft_freearr(char **arr, size_t index)
 		free(arr[counter]);
 	}
 	free(arr);
+	return (0);
 }
 
 //check if ft_count_arr should count one extra for the NULL termination of the

@@ -6,9 +6,11 @@
 /*   By: mstawski <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 18:55:51 by mstawski          #+#    #+#             */
-/*   Updated: 2025/11/20 18:55:53 by mstawski         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:48:49 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../minishell.h"
 
 void	ft_wa_handle_word(int in_arr[], size_t *words, char *s)
 {

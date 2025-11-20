@@ -6,7 +6,7 @@
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:31 by akonstan          #+#    #+#             */
-/*   Updated: 2025/11/20 19:09:28 by mstawski         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:45:39 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,8 +229,9 @@ int				ft_check_token_chain(t_token *chain, t_error *err);
 //-----------------------------------------------------------------------------
 void			ft_refresh_rl(void);
 int				ft_executor(t_pipe  *pipeline, t_shell *shell, t_error *err);
+int     ft_forking_check(t_pipe *pipeline, t_shell *shell, t_error *err);
 //-----------------------------------------------------------------------------
-//EXECUTOR HELPER (2)
+//EXECUTOR HELPER_1 (5)
 //-----------------------------------------------------------------------------
 t_built_in		ft_check_for_built_in(char *string, t_error *err);
 int				ft_exec_built_in(t_built_in built_in, t_shell *shell,
@@ -238,6 +239,12 @@ int				ft_exec_built_in(t_built_in built_in, t_shell *shell,
 int				ft_pathseter(t_envar *envc, t_shell *shell);
 char			*ft_pathfinder(char *command, t_shell *shell);
 int				ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err, int pipefd);
+//-----------------------------------------------------------------------------
+//EXECUTOR HELPER_2 (2)
+//-----------------------------------------------------------------------------
+int	ft_run_in_parent(t_pipe *pipe, int pipefd[], int *prev_fd);
+int      ft_run_in_child(t_pipe *pipe, t_shell *shell, int pipefd[],
+                                int prev_fd);
 //-----------------------------------------------------------------------------
 //EXPANDER (4)
 //-----------------------------------------------------------------------------
@@ -302,7 +309,7 @@ int				ft_del_pipeline(t_pipe **pipeline, t_error *err);
 //-----------------------------------------------------------------------------
 void			ft_del_string(char *string);
 size_t			ft_count_arr(char **arr);
-void			ft_freearr(char **arr, size_t index);
+int			ft_freearr(char **arr, size_t index);
 int				ft_del_shell(t_shell **shell);
 int				ft_del_envc(t_envar **envc, t_error *err);
 //-----------------------------------------------------------------------------
@@ -357,6 +364,12 @@ void			ft_inquote(char c, int *s_quote, int *d_quote);
 void			ft_wa_handle_word(int in_arr[], size_t *words, char *s);
 size_t			ft_word_amount(char *s, char c, t_error *err);
 void		    ft_signals(int signal);
+//-----------------------------------------------------------------------------
+//LEXER HELPER 4 (3)
+//-----------------------------------------------------------------------------
+int     ft_wa_pipe(char **s, size_t *words);
+void    ft_wa_handle_word(int in_arr[], size_t *words, char *s);
+void    ft_wa_init(size_t *words, int in_arr[3]);
 //-----------------------------------------------------------------------------
 //BUILT-INS
 //>>

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_mini.c                                    :+:      :+:    :+:   */
+/*   lexer_helper_2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 17:31:19 by akonstan          #+#    #+#             */
-/*   Updated: 2025/10/02 17:54:00 by mstawski         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:23:09 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,7 @@ int	ft_split_logic(char **str_arr, char *s, char c)
 			else
 				str_arr[index] = ft_write_word(&s, c);
 			if (!str_arr[index])
-			{
-				ft_freearr(str_arr, index);
-				return (0);
-			}
+				return (ft_freearr(str_arr, index));
 			index++;
 		}
 	}

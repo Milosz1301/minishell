@@ -6,7 +6,7 @@
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:23:09 by akonstan          #+#    #+#             */
-/*   Updated: 2025/11/20 18:34:09 by mstawski         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:45:35 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 //If it returns 1 we have to fork. If it returns 0 we can execute on the parent
 //proccess (the minishell) directly
 //if it returns -1 we have error
-static int	ft_forking_check(t_pipe *pipeline, t_shell *shell, t_error *err)
+int	ft_forking_check(t_pipe *pipeline, t_shell *shell, t_error *err)
 {
 	if (!pipeline || !shell)
 		return (err->forking_check = -1);
