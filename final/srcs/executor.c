@@ -6,7 +6,7 @@
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:23:09 by akonstan          #+#    #+#             */
-/*   Updated: 2025/11/20 20:45:35 by mstawski         ###   ########.fr       */
+/*   Updated: 2025/11/20 21:19:10 by akonstan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,13 @@ void	ft_refresh_rl(void)
 	rl_replace_line("", 0);
 }
 
+void	ft_exec_init(pid_t *pid, int *prevfd, t_shell *shell, t_pipe *pipeline)
+{
+	*pid = -1;
+	*prevfd = -1;
+	ft_get_heredocs(pipeline, shell);
+}
+
 //The whole process of the executor will be like this:
 //	1)Check if there is a second pipe or a Redirection
 //	2)If yes, then fork a child process and do in order:
@@ -101,15 +108,9 @@ int	ft_executor(t_pipe *pipeline, t_shell *shell, t_error *err)
 	int		pipefd[2];
 	int		prev_fd;
 	int		fork_check;
-	int		wstatus;
 
-	if (!pipeline || !shell)
-		return (err->executor = 1);
-	pid = -1;
-	prev_fd = -1;
-	ft_get_heredocs(pipeline, shell);
-	if (!pipeline->next && ft_check_for_built_in(pipeline->command->argv[0],
-			err))
+	ft_exec_init(&pid, &prev_fd, shell, pipeline);
+	if (!pipeline->next && ft_check_for_built_in(pipeline->command->argv[0], err))
 		ft_run_first_built_in(&pipeline, shell);
 	fork_check = ft_forking_check(pipeline, shell, err);
 	while (pipeline)
@@ -120,15 +121,12 @@ int	ft_executor(t_pipe *pipeline, t_shell *shell, t_error *err)
 		if (fork_check == 1)
 			pid = fork();
 		if (pid == 0)
-		{
 			ft_run_in_child(pipeline, shell, pipefd, prev_fd);
-			return (err->executor = 0);
-		}
 		else
 			ft_run_in_parent(pipeline, pipefd, &prev_fd);
 		pipeline = pipeline->next;
 	}
-	while (waitpid(-1, &wstatus, 0) > 0)
+	while (waitpid(-1, NULL, 0) > 0)
 		;
 	return (err->executor = 0);
 }

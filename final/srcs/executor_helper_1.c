@@ -112,36 +112,29 @@ char	*ft_pathfinder(char *command, t_shell *shell)
 //execve will send a SIGTRAP SIGNAL??
 int	ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err, int pipefd)
 {
-	char	**argv_ref;
+	char	**argv_r;
 	char	*command;
 	char	*path;
 
-	if (!pipe || !pipe->command || !shell)
+	if (!pipe || !pipe->command || !shell || !pipe->command->argv)
 		return (err->exec_cmd = 1);
-	argv_ref = pipe->command->argv;
-	if (argv_ref == NULL)
-		return (err->exec_cmd = 1);
-	command = argv_ref[0];
+	argv_r = pipe->command->argv;
+	cmd = argv_ref[0];
 	ft_pathseter(shell->envc, shell);
-	if (ft_check_for_built_in(command, err) != B_NONE)
+	if (ft_check_for_built_in(cmd, err) != B_NONE)
 	{
-		ft_exec_built_in(ft_check_for_built_in(command, err),
-			shell, argv_ref, pipe);
+		ft_exec_built_in(ft_check_for_built_in(cmd, err), shell, argv_r, pipe);
 		close(pipefd);
-		ft_del_pipeline(&shell->pipeline, err);
-		ft_del_shell(&shell);
 	}
 	else
 	{
 		if (pipe->next)
 			close(pipefd);
-		path = ft_pathfinder(command, shell);
+		path = ft_pathfinder(cmd, shell);
 		if (path != NULL)
-		{
-			execve(path, argv_ref, shell->envp);
-			free(path);
-		}
+			execve(path, argv_r, shell->envp);
+		perror("Error: INVALID COMMAND\n");
 	}
-	exit(0);
+	ft_exit(shell->pipeline, shell);
 	return (err->exec_cmd = 0);
 }
