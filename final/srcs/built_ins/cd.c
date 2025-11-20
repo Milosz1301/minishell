@@ -6,13 +6,13 @@
 /*   By: mstawski <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 15:17:59 by mstawski          #+#    #+#             */
-/*   Updated: 2025/11/13 17:33:43 by mstawski         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:28:53 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int		ft_expand_home(char	**argv, char *homepath)
+int	ft_expand_home(char **argv, char *homepath)
 {
 	char	*temp;
 
@@ -31,7 +31,7 @@ int		ft_expand_home(char	**argv, char *homepath)
 void	ft_cd_op(char *operand, t_envar *pwd, t_envar *old_pwd)
 {
 	struct stat	st;
-	char	*temp;
+	char		*temp;
 
 	temp = NULL;
 	if (!stat(operand, &st) && S_ISDIR(st.st_mode) && !access(operand, X_OK))

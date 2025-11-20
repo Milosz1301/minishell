@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:31 by akonstan          #+#    #+#             */
-/*   Updated: 2025/09/26 18:49:36 by akonstan         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:32:29 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,11 @@ static char    *ft_make_it_one_string(char **array)
 	return (str);
 }*/
 //Flag can only be in second spot in echo
-static bool    ft_check_for_nflag(char *argv)
+static bool	ft_check_for_nflag(char *argv)
 {
 	if (ft_strncmp(argv, "-n", 3) == 0)
 		return (true);
-	return (false); 
+	return (false);
 }
 
 //syntax will be checked earlier (before calling the echo function)
@@ -85,7 +85,7 @@ static bool    ft_check_for_nflag(char *argv)
 //the stdin and stdout anyways. Pay attention that echo does not take input
 //from stdin, just puts the string passed to the stdout (again, redirections
 //and pipes are replugging it)
-int ft_echo(char **argv, t_shell *shell, t_error *err)
+int	ft_echo(char **argv, t_shell *shell, t_error *err)
 {
 	int		i;
 

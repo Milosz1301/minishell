@@ -10,7 +10,7 @@ SRCS = srcs/cleaner.c srcs/cleaner_helper_1.c srcs/envar_helper_1.c \
 srcs/envar_helper_2.c srcs/envar_helper_3.c srcs/error_check.c srcs/expander.c \
 srcs/expander_helper_1.c srcs/expander_helper_2.c srcs/expander_helper_3.c \
 srcs/parser.c srcs/parser_helper_1.c srcs/parser_helper_2.c \
-srcs/redir_struct_helper.c srcs/tokens_helper.c srcs/main.c srcs/debugger.c \
+srcs/redir_struct_helper.c srcs/tokens_helper.c srcs/main.c \
 srcs/lexer_helper_2.c srcs/lexer.c srcs/lexer_helper_1.c srcs/lexer_helper_3.c \
 srcs/redirector_helper.c srcs/redirector.c srcs/built_ins/echo.c \
 srcs/built_ins/env.c srcs/built_ins/exit.c srcs/built_ins/export.c \

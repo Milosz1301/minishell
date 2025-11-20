@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleaner.c                                          :+:      :+:    :+:   */
+/*   redirector_helper.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:23:09 by akonstan          #+#    #+#             */
-/*   Updated: 2025/10/02 14:23:10 by akonstan         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:22:17 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_append(char *filepath, t_error *err)
 	fd = open(filepath, O_WRONLY | O_CREAT | O_APPEND, 00644);
 	if (fd == -1)
 		return (err->append = 1);
-	dup2(fd ,STDOUT_FILENO);
+	dup2(fd, STDOUT_FILENO);
 	close(fd);
 	return (err->append = 0);
 }
@@ -46,7 +46,7 @@ int	ft_infile(char *filepath, t_error *err)
 	int	fd;
 
 	fd = -1;
-	if (!access(filepath, F_OK) && ft_check_file_access(filepath , err) == 1)
+	if (!access(filepath, F_OK) && ft_check_file_access(filepath, err) == 1)
 		return (err->infile = 1);
 	fd = open(filepath, O_RDONLY);
 	if (fd == -1)
@@ -58,7 +58,7 @@ int	ft_infile(char *filepath, t_error *err)
 
 //Handles the > redirection
 int	ft_outfile(char *filepath, t_error *err)
-{	
+{
 	int	fd;
 
 	fd = -1;

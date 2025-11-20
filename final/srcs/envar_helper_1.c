@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   envar_helper_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:31 by akonstan          #+#    #+#             */
-/*   Updated: 2025/09/26 18:49:36 by akonstan         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:04:33 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_envar	*ft_new_envar(char *key, char *value, int is_exported, t_error *err)
 int	ft_add_envar(t_envar **envc, t_envar *var, t_error *err)
 {
 	if (!envc)
-		return(err->add_envar = 1);
+		return (err->add_envar = 1);
 	if (!*envc)
 		*envc = var;
 	else

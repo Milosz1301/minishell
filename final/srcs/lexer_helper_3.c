@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_mini.c                                    :+:      :+:    :+:   */
+/*   lexer_helper_3.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 17:31:19 by akonstan          #+#    #+#             */
-/*   Updated: 2025/10/02 17:54:00 by mstawski         ###   ########.fr       */
+/*   Updated: 2025/11/20 19:08:16 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,42 +48,6 @@ void	ft_inquote(char c, int *s_quote, int *d_quote)
 	}
 	else
 		return ;
-}
-
-void	ft_wa_handle_word(int in_arr[], size_t *words, char *s)
-{
-	in_arr[0] = 1;
-	(*words)++;
-	if (!in_arr[1] && *s == '"')
-		ft_inquote(*s, &in_arr[1], &in_arr[2]);
-	else if (!in_arr[2] && *s == '\'')
-		ft_inquote(*s, &in_arr[1], &in_arr[2]);
-}
-
-int	ft_wa_pipe(char **s, size_t	 *words)
-{
-	if (!s || !*s)
-		return (1);
-	if (!**s || !*(*s - 1) || !*(*s + 1))
-		return (1);
-	if (*(*s - 1) != ' ' || *(*s + 1) != ' ')
-	{
-		if (*(*s - 1) != ' ')
-			(*words)++;
-		if (*(*s + 1) != ' ')
-			(*words)++;
-	}
-	else
-		(*words)++;
-	return (0);
-}
-
-void	ft_wa_init(size_t *words, int in_arr[3])
-{
-	*words = 0;
-	in_arr[0] = 0;
-	in_arr[1] = 0;
-	in_arr[2] = 0;
 }
 
 //Word amount had a bug with redirections not being accounted for 

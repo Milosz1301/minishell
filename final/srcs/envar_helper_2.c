@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   envar_helper_2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:31 by akonstan          #+#    #+#             */
-/*   Updated: 2025/09/26 18:49:36 by akonstan         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:27:40 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	ft_assign_envp(t_envar *envc, char ***envp)
 char	**ft_set_envp(t_envar *envc, t_error *err)
 {
 	char	**envp;
-	
+
 	if (!envc)
 	{
 		err->set_envp = 1;
@@ -80,7 +80,7 @@ char	*ft_extract_key(char *str, t_error *err)
 		return (NULL);
 	}
 	amount = ((size_t)(end - start)) + 1;
-	key = ft_calloc(amount , sizeof(char));
+	key = ft_calloc(amount, sizeof(char));
 	ft_strlcpy(key, start, amount);
 	return (key);
 }
@@ -104,7 +104,7 @@ char	*ft_extract_value(char *str, t_error *err)
 	while (*str && *str != '=')
 		str++;
 	if (!*str)
-		return(NULL);
+		return (NULL);
 	str++;
 	start = str;
 	amount = ((size_t)(end - start)) + 1;
@@ -131,7 +131,7 @@ t_envar	*ft_set_envc(char **envp, t_error *err)
 	while (envp[i])
 	{
 		new_env = ft_new_envar(ft_extract_key(envp[i], err),
-					ft_extract_value(envp[i], err), 1, err);
+				ft_extract_value(envp[i], err), 1, err);
 		ft_add_envar(&envc, new_env, err);
 		i++;
 	}

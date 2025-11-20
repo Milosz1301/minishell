@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleaner.c                                          :+:      :+:    :+:   */
+/*   redirector.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:23:09 by akonstan          #+#    #+#             */
-/*   Updated: 2025/10/02 14:23:10 by akonstan         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:24:32 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 static int	ft_handle_redir(t_redirect *red_chain, t_shell *shell, t_error *err)
 {
 	if (!red_chain || !shell || red_chain->type == RE_NONE)
-		return(err->handle_redir = 1);
+		return (err->handle_redir = 1);
 	if (red_chain->type == RE_IN)
 		ft_infile(red_chain->target, err);
 	else if (red_chain->type == RE_OUT)
@@ -48,6 +48,5 @@ int	ft_redirector(t_redirect *red_chain, t_shell *shell, t_error *err)
 		ft_handle_redir(ref, shell, err);
 		ref = ref->next;
 	}
-	//ft_del_redir_chain(&red_chain, err);
 	return (err->redirector = 0);
 }

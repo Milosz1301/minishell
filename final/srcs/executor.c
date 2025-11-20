@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleaner.c                                          :+:      :+:    :+:   */
+/*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 14:23:09 by akonstan          #+#    #+#             */
-/*   Updated: 2025/10/02 14:23:10 by akonstan         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:34:09 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	ft_get_heredocs(t_pipe *pipeline, t_shell *shell)
 	if (!pipeline || !pipeline->command || !shell)
 		return (-1);
 	ref = NULL;
-	while(pipeline)
+	while (pipeline)
 	{
 		ref = pipeline->command->red_chain;
 		while (ref)
@@ -50,7 +50,7 @@ int	ft_get_heredocs(t_pipe *pipeline, t_shell *shell)
 		}
 		pipeline = pipeline->next;
 	}
-	return (0); 
+	return (0);
 }
 
 //A function that will run on parent the built-in
@@ -69,7 +69,7 @@ int	ft_run_first_built_in(t_pipe **pipe, t_shell *shell)
 		ft_redirector((*pipe)->command->red_chain, shell, shell->err);
 	ft_exec_built_in(b_type, shell, (*pipe)->command->argv, *pipe);
 	dup2(saved_fdin, STDIN_FILENO);
-	dup2(saved_fdout,STDOUT_FILENO);
+	dup2(saved_fdout, STDOUT_FILENO);
 	close(saved_fdin);
 	close(saved_fdout);
 	*pipe = (*pipe)->next;
@@ -77,39 +77,6 @@ int	ft_run_first_built_in(t_pipe **pipe, t_shell *shell)
 }
 
 //A function to run in the child process
-static int	ft_run_in_child(t_pipe *pipe, t_shell *shell, int pipefd[],
-				int prev_fd)
-{
-	if (prev_fd != -1)
-	{
-		dup2(prev_fd, STDIN_FILENO);
-		close(prev_fd);
-	}
-	if (pipe->command->red_chain != NULL)
-		ft_redirector(pipe->command->red_chain, shell, shell->err);
-	if (pipe->next != NULL)
-	{
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-	}
-	ft_exec_cmd(pipe, shell, shell->err, pipefd[0]);
-	exit(0);
-	return (0);
-}
-
-//Helper function to run in the parent process
-static int	ft_run_in_parent(t_pipe *pipe, int pipefd[], int *prev_fd)
-{
-	if (*prev_fd != -1)
-		close (*prev_fd);
-	if (pipe->next != NULL)
-	{
-		*prev_fd = pipefd[0];
-		close(pipefd[1]);
-	}
-	return (0);
-}
-
 //Helper function to refresh the prompt after the execution of a command
 void	ft_refresh_rl(void)
 {
@@ -128,7 +95,7 @@ void	ft_refresh_rl(void)
 //		b)If it is an external command, fork a child process, look for the 
 //			command in the path and if you find it then execute the command
 //	4)Main proccess should wait for the child processes to finish first
-int	ft_executor(t_pipe  *pipeline, t_shell *shell, t_error *err)
+int	ft_executor(t_pipe *pipeline, t_shell *shell, t_error *err)
 {
 	pid_t	pid;
 	int		pipefd[2];
@@ -141,7 +108,8 @@ int	ft_executor(t_pipe  *pipeline, t_shell *shell, t_error *err)
 	pid = -1;
 	prev_fd = -1;
 	ft_get_heredocs(pipeline, shell);
-	if (!pipeline->next && ft_check_for_built_in(pipeline->command->argv[0], err))
+	if (!pipeline->next && ft_check_for_built_in(pipeline->command->argv[0],
+			err))
 		ft_run_first_built_in(&pipeline, shell);
 	fork_check = ft_forking_check(pipeline, shell, err);
 	while (pipeline)

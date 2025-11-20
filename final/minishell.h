@@ -6,7 +6,7 @@
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:31 by akonstan          #+#    #+#             */
-/*   Updated: 2025/09/26 18:49:36 by akonstan         ###   ########.fr       */
+/*   Updated: 2025/11/20 19:09:28 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -389,20 +389,5 @@ int				ft_pwd(char **argv, t_shell *shell);
 //	 UNSET (3)
 //-----------------------------------------------------------------------------
 int				ft_unset(char **argv, t_shell *shell);
-//>>
 //-----------------------------------------------------------------------------
-//DEBUGGER
-//-----------------------------------------------------------------------------
-void    print_token_chain(t_token *chain, int token_amount);
-void	print_redir_chain(t_redirect *red_chain);
-void    print_pipeline(t_pipe *pipeline);
-char    *s_token_type(int num);
-char    *s_qtype(int num);
-void    s_token_dgb(t_token *token);
-char    *s_redir_type(int num);
-void    s_redirect_dgb(t_redirect *redir);
-void    s_cmd(t_cmd *command);
-void    s_pipe(t_pipe *pipeline);
-void    ft_print_envc(t_envar *envc);
-void	ft_print_envp(char	**envp);
 #endif

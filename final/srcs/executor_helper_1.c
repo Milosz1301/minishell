@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   executor_helper.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:31 by akonstan          #+#    #+#             */
-/*   Updated: 2025/09/26 18:49:36 by akonstan         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:19:33 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 t_built_in	ft_check_for_built_in(char *string, t_error *err)
 {
 	if (!string)
-		return(err->check_for_built_in = -1);
+		return (err->check_for_built_in = -1);
 	if (!ft_strncmp(string, "cd", ft_strlen("cd") + 1))
 		return (B_CD);
 	else if (!ft_strncmp(string, "echo", ft_strlen("echo") + 1))
@@ -44,7 +44,8 @@ t_built_in	ft_check_for_built_in(char *string, t_error *err)
 //	if (built_in == B_CD)
 //		ft_cd(argv);
 //ADD THIS BACK WHEN CD IS READYY!!!!!
-int	ft_exec_built_in(t_built_in built_in, t_shell *shell, char **argv, t_pipe *pipeline)
+int	ft_exec_built_in(t_built_in built_in, t_shell *shell
+		, char **argv, t_pipe *pipeline)
 {
 	if (!argv || !*argv)
 		return (shell->err->exec_built_in = 1);
@@ -98,10 +99,7 @@ char	*ft_pathfinder(char *command, t_shell *shell)
 		path = ft_strjoin(shell->path_arr[index], temp);
 		free(temp);
 		if (access(path, X_OK) == 0)
-		{
-			//ft_freearr(shell->path_arr, ft_count_arr(shell->path_arr));
 			return (path);
-		}
 		free(path);
 		index++;
 	}
@@ -127,7 +125,8 @@ int	ft_exec_cmd(t_pipe *pipe, t_shell *shell, t_error *err, int pipefd)
 	ft_pathseter(shell->envc, shell);
 	if (ft_check_for_built_in(command, err) != B_NONE)
 	{
-		ft_exec_built_in(ft_check_for_built_in(command, err), shell, argv_ref, pipe);
+		ft_exec_built_in(ft_check_for_built_in(command, err),
+			shell, argv_ref, pipe);
 		close(pipefd);
 		ft_del_pipeline(&shell->pipeline, err);
 		ft_del_shell(&shell);

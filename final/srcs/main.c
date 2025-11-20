@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:54 by akonstan          #+#    #+#             */
-/*   Updated: 2025/09/26 18:49:55 by akonstan         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:25:33 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int argc, char	*argv[], char **envp)
 			else
 			{
 				ft_refresh_rl();
-				continue;
+				continue ;
 			}
 			shell->chain = lexer(shell->input, shell->err);
 			shell->pipeline = ft_parser(&(shell->chain), shell->err);

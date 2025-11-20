@@ -6,7 +6,7 @@
 /*   By: akonstan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 18:49:54 by akonstan          #+#    #+#             */
-/*   Updated: 2025/09/26 18:49:55 by akonstan         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:20:08 by mstawski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int	ft_del_shell(t_shell **shell)
 	if ((*shell)->input)
 		free((*shell)->input);
 	if ((*shell)->envp)
-		ft_freearr((*shell)->envp, ft_envar_amount((*shell)->envc, (*shell)->err));
+		ft_freearr((*shell)->envp,
+			ft_envar_amount((*shell)->envc, (*shell)->err));
 	if ((*shell)->path_arr)
 		ft_freearr((*shell)->path_arr, ft_count_arr((*shell)->path_arr));
 	if ((*shell)->envc)
@@ -87,6 +88,5 @@ int	ft_del_envc(t_envar **envc, t_error *err)
 		free(*envc);
 		*envc = temp;
 	}
-	return(err->del_envc = 0);
+	return (err->del_envc = 0);
 }
-
