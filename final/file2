@@ -1,0 +1,16 @@
+IN CHILD Duplicated pipefd[1]: 5$
+IN CHILD Duplicated STDIN_FILENO: 0$
+IN CHILD Closed pipefd[1]: 5$
+total 176$
+drwxr-xr-x 5 akonstan 2024_warsaw   4096 Nov 19  2025 .$
+drwxr-xr-x 6 akonstan 2024_warsaw   4096 Nov 12 18:49 ..$
+-rw-r--r-- 1 akonstan 2024_warsaw   1741 Nov 12 18:49 default.supp$
+-rw-r--r-- 1 akonstan 2024_warsaw     33 Nov 17 19:35 file1$
+-rw-r--r-- 1 akonstan 2024_warsaw      0 Nov 19  2025 file2$
+drwxr-xr-x 4 akonstan 2024_warsaw   4096 Nov 12 18:49 libft_extended$
+-rw-r--r-- 1 akonstan 2024_warsaw   1243 Nov 12 18:49 Makefile$
+-rwxr-xr-x 1 akonstan 2024_warsaw 124976 Nov 19 14:49 minishell$
+-rw-r--r-- 1 akonstan 2024_warsaw  15347 Nov 19 14:32 minishell.h$
+drwxr-xr-x 3 akonstan 2024_warsaw   4096 Nov 19 14:49 objs$
+drwxr-xr-x 3 akonstan 2024_warsaw   4096 Nov 12 18:49 srcs$
+-rw-r--r-- 1 akonstan 2024_warsaw     21 Nov 17 19:43 we$
